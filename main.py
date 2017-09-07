@@ -118,7 +118,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                          learning_rate: 1e-3,
                          keep_prob: 0.7}
             op, loss = sess.run([train_op, cross_entropy_loss], feed_dict=feed_dict)
-            print("Epoch {0}, loss {1}", e, loss)
+        print("Epoch {}/{}, loss {}".format(e+1,epochs, loss))
 tests.test_train_nn(train_nn)
 
 
