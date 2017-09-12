@@ -57,17 +57,20 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # TODO: Implement function
     layer7 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, strides=(1,1), padding='same')
     deconv7 = tf.layers.conv2d_transpose(layer7, num_classes, 4, strides=(2, 2), padding='same',
-                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+					 kernel_initializer = tf.truncated_normal_initializer(stddev=0.01))
 
     layer4 = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, strides=(1, 1), padding='same')
     layer4 = tf.add(layer4, deconv7)
     deconv4 = tf.layers.conv2d_transpose(layer4, num_classes, 4, strides=(2, 2), padding='same',
-                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+					 kernel_initializer = tf.truncated_normal_initializer(stddev=0.01))
 
     layer3 = tf.layers.conv2d_transpose(vgg_layer3_out, num_classes, 1, strides=(1, 1), padding='same')
     layer3 = tf.add(layer3, deconv4)
     deconv3 = tf.layers.conv2d_transpose(layer3, num_classes, 16, strides=(8, 8), padding='same',
-                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3))
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(1e-3),
+					 kernel_initializer= tf.truncated_normal_initializer(stddev=0.01))
 
     return deconv3
 tests.test_layers(layers)
